@@ -16,6 +16,7 @@ class CalculatorApp extends StatelessWidget {
     );
   }
 }
+
 class CalculatorScreen extends StatefulWidget {
   @override
   _CalculatorScreenState createState() => _CalculatorScreenState();
@@ -24,6 +25,7 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String _display = '';  
   String _expression = '';  
+
   void _onPressed(String value) {
     setState(() {
       if (value == 'C') {
@@ -41,6 +43,16 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           } catch (e) {
             _display = 'Error';
           }
+        }
+      } else if (value == 'sq') {
+        try {
+          final expression = Expression.parse(_expression);
+          const evaluator = ExpressionEvaluator();
+          final result = evaluator.eval(expression, {});
+          _display = '($result)^2 = ${result * result}';
+          _expression = (result * result).toString();
+        } catch (e) {
+          _display = 'Error';
         }
       } else {
         _expression += value;
@@ -106,6 +118,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               _buildButton('C'),
               _buildButton('='),
               _buildButton('+'),
+            ],
+          ),
+          Row(
+            children: [
+              _buildButton('sq'), 
             ],
           ),
         ],
